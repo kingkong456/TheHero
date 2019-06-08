@@ -5,7 +5,8 @@ using UnityEngine;
 public class Enemy_Hp : MonoBehaviour {
     public float hp_start;
     public float hp_current;
-    public TextMesh hp_txt_PopUp;
+    public GameObject hp_txt_PopUp;
+    public float txt_height;
 
     private void Start()
     {
@@ -16,6 +17,7 @@ public class Enemy_Hp : MonoBehaviour {
     {
         hp_current -= dmg;
         //pop up txt
+        spawnTextPopUp((int)hp_current);
 
         if(hp_current <= 0)
         {
@@ -24,4 +26,9 @@ public class Enemy_Hp : MonoBehaviour {
         }
     }
 
+    void spawnTextPopUp(int txt)
+    {
+        GameObject go = Instantiate(hp_txt_PopUp, transform.position + (Vector3.up * txt_height), Quaternion.identity, transform);
+        go.GetComponent<TextMesh>().text = txt.ToString();
+    }
 }

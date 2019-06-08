@@ -7,6 +7,7 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
     private Enemy_Seeker m_eye;
     private Rigidbody m_rb;
     private Transform playerSee;
+    private Animator m_animator;
 
     [Header("enemy status")]
     public float speed;
@@ -22,6 +23,7 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
         //set my varible
         m_rb = this.GetComponent<Rigidbody>();
         m_eye = this.GetComponent<Enemy_Seeker>();
+        m_animator = this.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -33,9 +35,12 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
         if(m_eye.PlayerHadsee != null)
         {
             playerSee = m_eye.PlayerHadsee;
+            m_animator.SetBool("isRun", true);
+
             if (Vector3.Distance(transform.position, playerSee.position) <= enemy_stopDistance)
             {
                 //start attack
+                m_animator.SetBool("isRun", false);
 
                 return;
             }
@@ -44,13 +49,18 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
         else if(m_eye.PlayerHadsee == null)//iDle
         {
             check_isCanFollowPlayer();
+            m_animator.SetBool("isRun", false);
 
             //can't follow or can
             //walk to player
             if(isCanFollowPlayer)
             {
+                m_animator.SetBool("isRun", true);
+
                 if (Vector3.Distance(transform.position, playerSee.position) <= enemy_stopDistance)
                 {
+                    m_animator.SetBool("isRun", false);
+
                     return;
                 }
                 enemy_walkToPlayer();
