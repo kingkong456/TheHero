@@ -14,6 +14,7 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
     public float speed_airSpeed;
     public float jump_force;
     public float jump_forceHang;
+    public float attack_power;
 
     [Header("check")]
     public float check_groundDis;
@@ -39,7 +40,7 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
         this.GetComponent<SpringJoint>().spring = 0;
         this.GetComponent<SpringJoint>().damper = 0;
 
-       // sword_col.enabled = false;
+        sword_col.enabled = false;
         m_animator = this.GetComponent<Animator>();
         m_rb = this.GetComponent<Rigidbody>();
 	}
@@ -73,7 +74,7 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
         }
         else if(m_state == player_state.Hang)
         {
-            m_animator.SetBool("isFall", false);
+            m_animator.SetBool("Fall", false);
             playerHang();
         }
         else if(m_state == player_state.Attack)
@@ -189,10 +190,10 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
     }
 
     void playerToGrabing()
-    {
+    { 
         if (grabing_point != null)
         {
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.K))
             {
                 //this.GetComponent<SpringJoint>().connectedBody = grabing_point.GetComponent<Rigidbody>();
                 this.GetComponent<SpringJoint>().spring = 1000;
@@ -373,7 +374,8 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
         //open attac colider
         m_animator.SetInteger("Attack", 0);
         m_animator.ResetTrigger("runAttack");
-        //sword_col.enabled = true;
+        sword_col.enabled = true;
+        sword_col.GetComponent<weaponCollider>().dmg = attack_power;
     }
 
     void playerEndAttack()
@@ -383,7 +385,9 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
         {
             m_state = player_state.onGround;
         }
-        //sword_col.enabled = false;
+        sword_col.enabled = false;
+        sword_col.GetComponent<weaponCollider>().dmg = attack_power;
+
         if(m_animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") && m_animator.GetInteger("Attack") == 1)
         {
             Debug.Log("case1");
