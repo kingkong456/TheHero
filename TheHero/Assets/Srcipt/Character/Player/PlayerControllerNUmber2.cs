@@ -50,6 +50,13 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
     {
 		if(m_state == player_state.onGround)
         {
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                m_state = player_state.on_ui;
+                PlayerSkill.instace.open_skill_navegation();
+                return;
+            }
+
             checked_ground();
             m_animator.ResetTrigger("runAttack");
             m_animator.SetBool("Fall", false);
@@ -176,6 +183,7 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
                 animation_index = Random.Range(1, 4);
 
                 m_animator.SetInteger("Attack", animation_index);
+                m_animator.speed = 1 + (PlayerPrefs.GetInt("water_lv", 0) * 0.25f);
             }
 
             m_rb.velocity = Vector3.zero;
@@ -375,7 +383,14 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
         m_animator.SetInteger("Attack", 0);
         m_animator.ResetTrigger("runAttack");
         sword_col.enabled = true;
-        sword_col.GetComponent<weaponCollider>().dmg = attack_power;
+        if (PlayerPrefs.GetInt("fire_lv", 0) == 0)
+        {
+            sword_col.GetComponent<weaponCollider>().dmg = attack_power;
+        }
+        else
+        {
+            sword_col.GetComponent<weaponCollider>().dmg = attack_power + (PlayerPrefs.GetInt("fire_lv", 0) * 0.5f);
+        }
     }
 
     void playerEndAttack()
@@ -407,6 +422,7 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
             m_state = player_state.onGround;
         }
 
+        m_animator.speed = 1f;
     }
 
     void Hook()

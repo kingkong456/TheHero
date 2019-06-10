@@ -28,7 +28,7 @@ public class Hp_Player : MonoBehaviour {
 
     public void getDanmge(float dmg)
     {
-        Hp_current -= dmg;
+        Hp_current -= dmg + (PlayerPrefs.GetInt("rock_lv", 0) * 0.1f);
         update_HpBar();
 
         //die

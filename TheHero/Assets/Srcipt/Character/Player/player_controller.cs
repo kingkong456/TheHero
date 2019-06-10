@@ -10,7 +10,8 @@ public enum player_state
     Hang,
     HangJump,
     Attack,
-    Hook
+    Hook,
+    on_ui
 }
 
 namespace UnityStandardAssets.Characters.ThirdPerson

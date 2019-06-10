@@ -7,9 +7,13 @@ public class Enemy_Hp : MonoBehaviour {
     public float hp_current;
     public GameObject hp_txt_PopUp;
     public float txt_height;
+    public bool isHurt = false;
+
+    private Animator m_animator;
 
     private void Start()
     {
+        m_animator = GetComponent<Animator>();
         hp_current = hp_start;
     }
 
@@ -18,12 +22,29 @@ public class Enemy_Hp : MonoBehaviour {
         hp_current -= dmg;
         //pop up txt
         spawnTextPopUp((int)hp_current);
+        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
-        if(hp_current <= 0)
+        this.GetComponent<Rigidbody>().velocity = Vector3.right * transform.localScale.z * 4 + (Vector3.up * 2);
+
+        m_animator.SetTrigger("HitReact");
+
+        if (hp_current <= 0)
         {
             //die
-            
+            m_animator.SetTrigger("die");
+            //this.GetComponent<Collider>().enabled = false;
+            Destroy(this.gameObject, 3f);
         }
+    }
+
+    void startHurt()
+    {
+        isHurt = true;
+    }
+
+    void endHurt()
+    {
+        isHurt = false;
     }
 
     void spawnTextPopUp(int txt)

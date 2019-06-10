@@ -14,12 +14,18 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
     public float enemy_scene;
     public float enemy_stopDistance;
 
+    [Header("Attack status")]
+    public float attack_power;
+    public Collider attack_col;
+
     //selft state
     private bool isCanFollowPlayer = false;
 
 	// Use this for initialization
 	void Start ()
     {
+        attack_col.enabled = false;
+
         //set my varible
         m_rb = this.GetComponent<Rigidbody>();
         m_eye = this.GetComponent<Enemy_Seeker>();
@@ -27,8 +33,13 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update ()
+	void FixedUpdate ()
     {
+        if(this.GetComponent<Enemy_Hp>().isHurt)
+        {
+            return;
+        }
+
         m_eye.checkPlayerInRange();
 
         //walk to player
@@ -41,6 +52,7 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
             {
                 //start attack
                 m_animator.SetBool("isRun", false);
+                m_animator.SetTrigger("Attack");
 
                 return;
             }
@@ -60,6 +72,7 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
                 if (Vector3.Distance(transform.position, playerSee.position) <= enemy_stopDistance)
                 {
                     m_animator.SetBool("isRun", false);
+                    m_animator.SetTrigger("Attack");
 
                     return;
                 }
@@ -69,7 +82,7 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
         }
 	}
 
-    //*********************ENEMY ACTION*****************
+    //*********************ENEMY ACTION***************
     #region enemy action
 
     void enemy_walkToPlayer()
@@ -124,7 +137,7 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
 
     #endregion
 
-    //********************BUILD IN********************
+    //********************BUILD IN*********************
     #region build in
 
     private void OnDrawGizmosSelected()
@@ -134,4 +147,22 @@ public class Enemy_meleeBehavevior : MonoBehaviour {
     }
 
     #endregion
+
+    //*******************ANAMATION EVENT***************
+    #region Animation event
+
+    void start_attack()
+    {
+        m_animator.ResetTrigger("Attack");
+        attack_col.GetComponent<weaponCollider>().dmg = attack_power;
+        attack_col.enabled = true;
+    }
+
+    void end_attack()
+    {
+        attack_col.enabled = false;
+    }
+
+    #endregion
+
 }
