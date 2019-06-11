@@ -48,6 +48,11 @@ public class PlayerControllerNUmber2 : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate ()
     {
+        if(m_state == player_state.on_ui)
+        {
+            m_animator.SetBool("isRun", false);
+        }
+
 		if(m_state == player_state.onGround)
         {
             if(Input.GetKeyDown(KeyCode.E))
