@@ -13,6 +13,11 @@ public class PlayerCoin : MonoBehaviour {
         instane = this;
     }
 
+    private void Start()
+    {
+        updateCoinTxt();
+    }
+
     public void updateCoinTxt()
     {
         coin_txt.text = PlayerPrefs.GetInt("coin", 0).ToString();

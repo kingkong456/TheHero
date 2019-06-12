@@ -8,11 +8,16 @@ public class CutSceneTrigger : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other);
         if(other.gameObject.tag == "Player")
         {
+            Debug.Log("Player");
             BlackPart.SetTrigger("cutScene");
             FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
-            FindObjectOfType<PlayerControllerNUmber2>().m_state = player_state.on_ui;
+            if (FindObjectOfType<PlayerControllerNUmber2>() != null)
+            {
+                FindObjectOfType<PlayerControllerNUmber2>().m_state = player_state.on_ui;
+            }
         }
     }
 
